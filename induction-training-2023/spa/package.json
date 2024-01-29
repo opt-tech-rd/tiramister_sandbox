@@ -1,0 +1,21 @@
+{
+  "scripts": {
+    "start": "parcel serve public/index.html --no-cache -p 3000"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.10",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "parcel-bundler": "^1.12.5",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "engines": {
+    "node": ">= 14",
+    "npm": ">= 6"
+  },
+  "engineStrict": true
+}
