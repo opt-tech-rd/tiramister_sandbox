@@ -4,12 +4,12 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import Top from "./pages/Top";
 import Counter from "./pages/Counter";
-import Detail from "./pages/Detail";
+import Pokemon from "./components/Pokemon";
 
 const router = createBrowserRouter([
   { path: "/", element: <Top /> },
   { path: "counter", element: <Counter /> },
-  { path: "detail/:id", element: <Detail /> },
+  { path: "pokemons/:id", element: <Pokemon /> },
 ]);
 
 const container = document.getElementById("root")!;
