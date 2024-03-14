@@ -4,7 +4,7 @@ import contributors.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.CountDownLatch
 
 fun loadContributorsCallbacks(service: GitHubService, req: RequestData, updateResults: (List<User>) -> Unit) {
     service.getOrgReposCall(req.org).onResponse { responseRepos ->
@@ -12,18 +12,20 @@ fun loadContributorsCallbacks(service: GitHubService, req: RequestData, updateRe
         val repos = responseRepos.bodyList()
         val allUsers = mutableListOf<User>()
 
-        val proceededCount = AtomicInteger(0)
+        val workingThreadsCountDownLatch = CountDownLatch(repos.size)
         for (repo in repos) {
             service.getRepoContributorsCall(req.org, repo.name).onResponse { responseUsers ->
                 logUsers(repo, responseUsers)
                 val users = responseUsers.bodyList()
                 allUsers += users
-
-                if (proceededCount.incrementAndGet() == repos.size) {
-                    updateResults(allUsers.aggregate())
-                }
+                workingThreadsCountDownLatch.countDown()
             }
         }
+
+        // 0 になるまでブロック
+        workingThreadsCountDownLatch.await()
+
+        updateResults(allUsers.aggregate())
     }
 }
 
